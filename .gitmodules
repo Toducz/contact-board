@@ -1,0 +1,3 @@
+[submodule "contact-board-frontend"]
+	path = contact-board-frontend
+	url = git@github.com:Toducz/contact-board-frontend.git
