@@ -1,0 +1,57 @@
+
+namespace: toducze-test
+
+api:
+  deploymentName: rest-api-dotnet-deployment
+  replicaCount: 1
+  container:
+    port: 80
+    image:
+      repository: d.codespring.ro/toducz.endre/kubernetes/dotnet-j
+      tag: latest
+      pullPolicy: Always
+      pullSecret: regcred
+  service:
+    type: ClusterIP
+    port: 80
+  
+
+ingress:
+  name: ingress-juli
+  host: te-dotnet-restapi.cs-test-kube.codespring.ro
+
+frontend:
+  deploymentName: angular-frontend-deployment
+  replicaCount: 1
+  container:
+    port: 80
+    image:
+      repository: d.codespring.ro/toducz.endre/kubernetes/angular-j
+      tag: latest
+      pullPolicy: Always
+      pullSecret: regcred
+  service:
+    port: 80
+    type: ClusterIP
+
+postgres:
+  auth:
+    username: postgres
+    password: Alm3fa45
+    database: postgres
+  deploymentName: postgres-deployment
+  replicaCount: 1
+  container:
+    port: 5432
+    image:
+      repository: postgres
+      tag: latest
+
+  service:
+    port: 5432
+    type: ClusterIP
+
+
+configMap:
+  postgres:
+    name: postgres-config

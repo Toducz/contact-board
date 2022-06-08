@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.api.deploymentName }} 
+  labels:
+    app: {{ .Values.api.deploymentName }} 
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.api.deploymentName }} 
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.api.deploymentName }} 
+    spec:
+      containers:
+      - name: {{ .Values.api.deploymentName }} 
+        image: {{ .Values.api.container.image.repository }}
+        imagePullPolicy: {{ .Values.api.container.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.api.container.port }}
+          protocol: TCP
+          name: http
+          
+        env:
+          - name: CONNECTIONSTRING__DEFAULTCONNECTION
+            value: "Server={{ .Values.postgres.deploymentName }};Port={{ .Values.postgres.service.port }};Database={{ .Values.postgres.auth.database }};User Id={{ .Values.postgres.auth.username }};Password={{ .Values.postgres.auth.password }}"
+      imagePullSecrets:
+        - name: {{ .Values.api.container.image.pullSecret }}    
+
